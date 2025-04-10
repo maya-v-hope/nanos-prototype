@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Nanos Prototype" />
+    <title>Nanos Prototype</title>
+    <!-- Load React from CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Load React Router from CDN -->
+    <script src="https://unpkg.com/react-router-dom@6.10.0/dist/umd/react-router-dom.production.min.js"></script>
+    <!-- Load Styled Components from CDN -->
+    <script src="https://unpkg.com/styled-components@6.0.0-rc.3/dist/styled-components.min.js"></script>
+    <!-- Load Babel for JSX support -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: #121212;
+      }
+      
+      * {
+        box-sizing: border-box;
+      }
+
+      #root {
+        height: 100vh;
+      }
+
+      @media (max-width: 430px) {
+        body {
+          background-color: #000000;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- App Components -->
+    <script type="text/babel" data-type="module">
+      // Import from React Router DOM
+      const { BrowserRouter, Routes, Route, useNavigate } = ReactRouterDOM;
+      // Import from Styled Components
+      const styled = window.styled;
+
+      // HomeScreen Component
+      const HomeScreen = () => {
+        const navigate = useNavigate();
+        const [balance, setBalance] = React.useState(125.34);
+        const [businessBalance, setBusinessBalance] = React.useState(40.00);
+        const [showBusiness, setShowBusiness] = React.useState(false);
+
+        return (
+          <Container>
+            <BalanceContainer>
+              <BalanceLabel>Cash balance</BalanceLabel>
+              <BalanceAmount>
+                ${showBusiness ? businessBalance.toFixed(2) : balance.toFixed(2)}
+              </BalanceAmount>
+              <ToggleButton onClick={() => setShowBusiness(!showBusiness)}>
+                {showBusiness ? 'Show Personal' : 'Show Business'}
+              </ToggleButton>
+            </BalanceContainer>
+
+            <ActionContainer>
+              <ActionButton onClick={() => navigate('/payment')}>
+                Send & Request
+              </ActionButton>
+              <ActionButton onClick={() => navigate('/merchant')}>
+                Accept Payment
+              </ActionButton>
+            </ActionContainer>
+          </Container>
+        );
+      };
+
+      // Styled Components
+      const Container = styled.div`
+        flex: 1;
+        background-color: #000000;
+        min-height: 100vh;
+        padding: 20px;
+      `;
+
+      const BalanceContainer = styled.div`
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 40px;
+      `;
+
+      const BalanceLabel = styled.span`
+        color: #8E8E93;
+        font-size: 16px;
+      `;
+
+      const BalanceAmount = styled.span`
+        color: #FFFFFF;
+        font-size: 40px;
+        font-weight: bold;
+        margin: 10px 0;
+      `;
+
+      const ToggleButton = styled.button`
+        background-color: #1E1E1E;
+        padding: 10px 20px;
+        border-radius: 20px;
+        margin-top: 10px;
+        border: none;
+        color: #00D632;
+        font-size: 16px;
+        cursor: pointer;
+      `;
+
+      const ActionContainer = styled.div`
+        display: flex;
+        justify-content: space-around;
+        margin-top: 40px;
+        padding: 0 20px;
+      `;
+
+      const ActionButton = styled.button`
+        background-color: #00D632;
+        padding: 15px;
+        border-radius: 25px;
+        width: 45%;
+        border: none;
+        color: #000000;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        
+        &:hover {
+          opacity: 0.9;
+        }
+      `;
+
+      const AppContainer = styled.div`
+        max-width: 430px;
+        height: 100vh;
+        margin: 0 auto;
+        background-color: #000000;
+        position: relative;
+        overflow: hidden;
+      `;
+
+      const PhoneFrame = styled.div`
+        position: fixed;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 430px;
+        height: 100vh;
+        border-radius: 40px;
+        border: 12px solid #1a1a1a;
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        background: #000000;
+      `;
+
+      // App Component
+      const App = () => {
+        return (
+          <BrowserRouter basename="/nanos-prototype">
+            <AppContainer>
+              <PhoneFrame>
+                <Routes>
+                  <Route path="/" element={<HomeScreen />} />
+                  <Route path="/payment" element={<div>Payment Screen</div>} />
+                  <Route path="/merchant" element={<div>Merchant Screen</div>} />
+                </Routes>
+              </PhoneFrame>
+            </AppContainer>
+          </BrowserRouter>
+        );
+      };
+
+      // Render the App
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      );
+    </script>
+  </body>
+</html> 
