@@ -10,9 +10,11 @@
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <!-- Load React Router from CDN -->
+    <script src="https://unpkg.com/history@5/umd/history.production.min.js"></script>
+    <script src="https://unpkg.com/react-router@6.10.0/dist/umd/react-router.production.min.js"></script>
     <script src="https://unpkg.com/react-router-dom@6.10.0/dist/umd/react-router-dom.production.min.js"></script>
     <!-- Load Styled Components from CDN -->
-    <script src="https://unpkg.com/styled-components@6.0.0-rc.3/dist/styled-components.min.js"></script>
+    <script src="https://unpkg.com/styled-components@5.3.5/dist/styled-components.min.js"></script>
     <!-- Load Babel for JSX support -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
@@ -46,9 +48,9 @@
     <div id="root"></div>
 
     <!-- App Components -->
-    <script type="text/babel" data-type="module">
+    <script type="text/babel">
       // Import from React Router DOM
-      const { BrowserRouter, Routes, Route, useNavigate } = ReactRouterDOM;
+      const { HashRouter, Routes, Route, useNavigate } = ReactRouterDOM;
       // Import from Styled Components
       const styled = window.styled;
 
@@ -170,17 +172,17 @@
       // App Component
       const App = () => {
         return (
-          <BrowserRouter basename="/nanos-prototype">
+          <HashRouter>
             <AppContainer>
               <PhoneFrame>
                 <Routes>
                   <Route path="/" element={<HomeScreen />} />
-                  <Route path="/payment" element={<div>Payment Screen</div>} />
-                  <Route path="/merchant" element={<div>Merchant Screen</div>} />
+                  <Route path="/payment" element={<div style={{color: 'white', padding: '20px'}}>Payment Screen</div>} />
+                  <Route path="/merchant" element={<div style={{color: 'white', padding: '20px'}}>Merchant Screen</div>} />
                 </Routes>
               </PhoneFrame>
             </AppContainer>
-          </BrowserRouter>
+          </HashRouter>
         );
       };
 
