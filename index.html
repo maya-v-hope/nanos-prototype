@@ -85,6 +85,162 @@
         );
       };
 
+      // PaymentScreen Component
+      const PaymentScreen = () => {
+        const navigate = useNavigate();
+        const [amount, setAmount] = React.useState('0');
+        const [recipients] = React.useState([
+          { id: '1', name: 'Chris Bedford', handle: '@chrisbedford' },
+          { id: '2', name: 'Dana Webster', handle: '@danawebster' },
+          { id: '3', name: 'Ricardo Malvarez', handle: '@rickymalv' },
+          { id: '4', name: 'Victor Preact', handle: '@vpreact' },
+        ]);
+
+        const handleNumberPress = (num) => {
+          if (amount === '0') {
+            setAmount(num.toString());
+          } else {
+            setAmount(amount + num.toString());
+          }
+        };
+
+        const handleBackspace = () => {
+          if (amount.length > 1) {
+            setAmount(amount.slice(0, -1));
+          } else {
+            setAmount('0');
+          }
+        };
+
+        const renderKeypadButton = (content, onClick) => (
+          <KeypadButton onClick={onClick}>
+            <KeypadButtonText>{content}</KeypadButtonText>
+          </KeypadButton>
+        );
+
+        return (
+          <Container>
+            <Header>
+              <CloseButton onClick={() => navigate('/')}>×</CloseButton>
+            </Header>
+
+            <AmountContainer>
+              <DollarSign>$</DollarSign>
+              <Amount>{amount}</Amount>
+            </AmountContainer>
+
+            <RecipientList>
+              <RecipientHeader>Suggested</RecipientHeader>
+              {recipients.map((recipient) => (
+                <RecipientItem key={recipient.id}>
+                  <RecipientAvatar>
+                    {recipient.name[0]}
+                  </RecipientAvatar>
+                  <RecipientInfo>
+                    <RecipientName>{recipient.name}</RecipientName>
+                    <RecipientHandle>{recipient.handle}</RecipientHandle>
+                  </RecipientInfo>
+                </RecipientItem>
+              ))}
+            </RecipientList>
+
+            <Keypad>
+              <KeypadRow>
+                {renderKeypadButton('1', () => handleNumberPress(1))}
+                {renderKeypadButton('2', () => handleNumberPress(2))}
+                {renderKeypadButton('3', () => handleNumberPress(3))}
+              </KeypadRow>
+              <KeypadRow>
+                {renderKeypadButton('4', () => handleNumberPress(4))}
+                {renderKeypadButton('5', () => handleNumberPress(5))}
+                {renderKeypadButton('6', () => handleNumberPress(6))}
+              </KeypadRow>
+              <KeypadRow>
+                {renderKeypadButton('7', () => handleNumberPress(7))}
+                {renderKeypadButton('8', () => handleNumberPress(8))}
+                {renderKeypadButton('9', () => handleNumberPress(9))}
+              </KeypadRow>
+              <KeypadRow>
+                {renderKeypadButton('.', () => handleNumberPress('.'))}
+                {renderKeypadButton('0', () => handleNumberPress(0))}
+                {renderKeypadButton('⌫', handleBackspace)}
+              </KeypadRow>
+            </Keypad>
+
+            <PayButton>
+              <PayButtonText>Pay</PayButtonText>
+            </PayButton>
+          </Container>
+        );
+      };
+
+      // MerchantScreen Component
+      const MerchantScreen = () => {
+        const navigate = useNavigate();
+        const [amount, setAmount] = React.useState('');
+        const [note, setNote] = React.useState('');
+        const [isBusinessPayment, setIsBusinessPayment] = React.useState(true);
+
+        return (
+          <Container>
+            <Header>
+              <CloseButton onClick={() => navigate('/')}>×</CloseButton>
+            </Header>
+
+            <ContentContainer>
+              <Title>Accept Payment</Title>
+              
+              <InputContainer>
+                <Label>Amount</Label>
+                <AmountInputContainer>
+                  <DollarSign>$</DollarSign>
+                  <AmountInput
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    placeholder="0.00"
+                    type="number"
+                  />
+                </AmountInputContainer>
+              </InputContainer>
+
+              <InputContainer>
+                <Label>What's it for?</Label>
+                <NoteInput
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  placeholder="Add a note"
+                />
+              </InputContainer>
+
+              <ToggleContainer>
+                <ToggleInfo>
+                  <ToggleLabel>Business Payment</ToggleLabel>
+                  <ToggleSubLabel>
+                    Collect payments for goods and services
+                  </ToggleSubLabel>
+                </ToggleInfo>
+                <Switch
+                  checked={isBusinessPayment}
+                  onChange={() => setIsBusinessPayment(!isBusinessPayment)}
+                />
+              </ToggleContainer>
+
+              <InfoContainer>
+                <InfoText>
+                  {isBusinessPayment
+                    ? 'Business payments include buyer protection and transaction fees'
+                    : 'Personal payments have no fees'}
+                </InfoText>
+              </InfoContainer>
+            </ContentContainer>
+
+            <CreateButton disabled={!amount}>
+              Create Payment Link
+            </CreateButton>
+          </Container>
+        );
+      };
+
       // Styled Components
       const Container = styled.div`
         flex: 1;
@@ -169,6 +325,261 @@
         background: #000000;
       `;
 
+      const Header = styled.div`
+        padding: 20px;
+        display: flex;
+        justify-content: flex-end;
+      `;
+
+      const CloseButton = styled.button`
+        background: none;
+        border: none;
+        color: #FFFFFF;
+        font-size: 32px;
+        cursor: pointer;
+        padding: 0;
+      `;
+
+      const AmountContainer = styled.div`
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0;
+      `;
+
+      const DollarSign = styled.span`
+        color: #00D632;
+        font-size: 40px;
+        font-weight: bold;
+      `;
+
+      const Amount = styled.span`
+        color: #00D632;
+        font-size: 40px;
+        font-weight: bold;
+      `;
+
+      const Keypad = styled.div`
+        padding: 20px;
+      `;
+
+      const KeypadRow = styled.div`
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+      `;
+
+      const KeypadButton = styled.button`
+        width: 60px;
+        height: 60px;
+        border-radius: 30px;
+        background-color: #1E1E1E;
+        border: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+      `;
+
+      const KeypadButtonText = styled.span`
+        color: #FFFFFF;
+        font-size: 24px;
+      `;
+
+      const RecipientList = styled.div`
+        flex: 1;
+        padding: 0 20px;
+      `;
+
+      const RecipientHeader = styled.div`
+        color: #8E8E93;
+        font-size: 16px;
+        margin-bottom: 10px;
+      `;
+
+      const RecipientItem = styled.div`
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+        cursor: pointer;
+      `;
+
+      const RecipientAvatar = styled.div`
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        background-color: #1E1E1E;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #FFFFFF;
+        font-size: 18px;
+      `;
+
+      const RecipientInfo = styled.div`
+        margin-left: 10px;
+      `;
+
+      const RecipientName = styled.div`
+        color: #FFFFFF;
+        font-size: 16px;
+      `;
+
+      const RecipientHandle = styled.div`
+        color: #8E8E93;
+        font-size: 14px;
+      `;
+
+      const PayButton = styled.button`
+        background-color: #00D632;
+        margin: 20px;
+        padding: 15px;
+        border-radius: 25px;
+        border: none;
+        width: calc(100% - 40px);
+        cursor: pointer;
+      `;
+
+      const PayButtonText = styled.span`
+        color: #000000;
+        font-size: 18px;
+        font-weight: bold;
+      `;
+
+      const ContentContainer = styled.div`
+        flex: 1;
+        padding: 20px;
+      `;
+
+      const Title = styled.h1`
+        color: #FFFFFF;
+        font-size: 24px;
+        margin-bottom: 30px;
+      `;
+
+      const InputContainer = styled.div`
+        margin-bottom: 20px;
+      `;
+
+      const Label = styled.div`
+        color: #8E8E93;
+        font-size: 16px;
+        margin-bottom: 10px;
+      `;
+
+      const AmountInputContainer = styled.div`
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #1E1E1E;
+        padding-bottom: 10px;
+      `;
+
+      const AmountInput = styled.input`
+        flex: 1;
+        background: none;
+        border: none;
+        color: #FFFFFF;
+        font-size: 24px;
+        padding: 0;
+        margin-left: 5px;
+        &:focus {
+          outline: none;
+        }
+        &::placeholder {
+          color: #8E8E93;
+        }
+      `;
+
+      const NoteInput = styled.input`
+        width: 100%;
+        background: none;
+        border: none;
+        border-bottom: 1px solid #1E1E1E;
+        color: #FFFFFF;
+        font-size: 16px;
+        padding: 0 0 10px 0;
+        &:focus {
+          outline: none;
+        }
+        &::placeholder {
+          color: #8E8E93;
+        }
+      `;
+
+      const ToggleContainer = styled.div`
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #1E1E1E;
+        padding: 15px;
+        border-radius: 10px;
+        margin: 20px 0;
+      `;
+
+      const ToggleInfo = styled.div``;
+
+      const ToggleLabel = styled.div`
+        color: #FFFFFF;
+        font-size: 16px;
+        margin-bottom: 5px;
+      `;
+
+      const ToggleSubLabel = styled.div`
+        color: #8E8E93;
+        font-size: 14px;
+      `;
+
+      const Switch = styled.input.attrs({ type: 'checkbox' })`
+        position: relative;
+        width: 50px;
+        height: 28px;
+        appearance: none;
+        background-color: ${props => props.checked ? '#00D632' : '#1E1E1E'};
+        border-radius: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        
+        &:before {
+          content: '';
+          position: absolute;
+          width: 24px;
+          height: 24px;
+          border-radius: 12px;
+          background-color: #FFFFFF;
+          top: 2px;
+          left: ${props => props.checked ? '24px' : '2px'};
+          transition: left 0.3s;
+        }
+      `;
+
+      const InfoContainer = styled.div`
+        background-color: #1E1E1E;
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 10px;
+      `;
+
+      const InfoText = styled.div`
+        color: #8E8E93;
+        font-size: 14px;
+        text-align: center;
+      `;
+
+      const CreateButton = styled.button`
+        background-color: #00D632;
+        margin: 20px;
+        padding: 15px;
+        border-radius: 25px;
+        border: none;
+        width: calc(100% - 40px);
+        color: #000000;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        opacity: ${props => props.disabled ? 0.5 : 1};
+        pointer-events: ${props => props.disabled ? 'none' : 'auto'};
+      `;
+
       // App Component
       const App = () => {
         return (
@@ -177,8 +588,8 @@
               <PhoneFrame>
                 <Routes>
                   <Route path="/" element={<HomeScreen />} />
-                  <Route path="/payment" element={<div style={{color: 'white', padding: '20px'}}>Payment Screen</div>} />
-                  <Route path="/merchant" element={<div style={{color: 'white', padding: '20px'}}>Merchant Screen</div>} />
+                  <Route path="/payment" element={<PaymentScreen />} />
+                  <Route path="/merchant" element={<MerchantScreen />} />
                 </Routes>
               </PhoneFrame>
             </AppContainer>
